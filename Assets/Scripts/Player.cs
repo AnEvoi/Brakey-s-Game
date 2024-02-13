@@ -4,13 +4,26 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 5f;
-    public float dashSpeed = 5f;
-    public float jumpForce = 10f;
+    [Header("Player Speed")]
+    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float dashSpeed = 5f;
+    [SerializeField] private float jumpForce = 10f;
 
-    public float dashCool = .5f, dashCounter;
-    public bool isDashed;
-    public bool isGrounded;
+    [Header("Dash")]
+    [SerializeField] private float dashCool = .5f, dashCounter;
+    [SerializeField] private bool isDashed;
+    [SerializeField] private bool isGrounded;
+
+    [Header("Meele")]
+    public Animator anim;
+    private float timeUntilMeele;
+    [SerializeField] private float meeleSpeed;
+    bool isAttacked = false;
+
+    private void Start() 
+    {
+        anim = GetComponent<Animator>();
+    }
 
 
     void Update()
@@ -32,6 +45,14 @@ public class PlayerController : MonoBehaviour
         {
             isDashed = true;
             dashCounter = dashCool;
+        }
+
+        //Attack
+        if(Input.GetMouseButtonDown(0))
+        {
+            anim.SetTrigger("Attack");
+            isAttacked = true;
+            
         }
 
         DashUpdate();
@@ -72,6 +93,14 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy") && isAttacked == true)
+        {
+            collision.GetComponent<Enemy>().TakeDamage(1);
+            Debug.Log("hit");
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
@@ -22,13 +23,18 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
 
     [Header("--Meele--")]
+    [SerializeField] private float damage = 1f;
+    [SerializeField] private float knockbackForce;
     public Animator meeleAnim;
     bool isAttacked = false;
 
     Rigidbody2D rb;
+    public Collider2D sword;
 
-    private void Awake() 
+    private void Start() 
     {
+        sword.enabled = false;
+        sword = GameObject.FindGameObjectWithTag("Sword").GetComponent<Collider2D>();
         meeleAnim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
     }
@@ -94,9 +100,12 @@ public class PlayerController : MonoBehaviour
         //Attack
         if(Input.GetMouseButtonDown(0))
         {
+            sword.enabled = true;
             meeleAnim.SetTrigger("Attack");
             isAttacked = true;
-            
+        }
+        else if (Input.GetMouseButtonUp(0)){
+            sword.enabled = false;
         }
         #endregion
 
@@ -145,7 +154,10 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy") && isAttacked == true)
         {
-            collision.GetComponent<Enemy>().TakeDamage(1);
+            Vector2 direction = (collision.transform.position - transform.position).normalized;
+            Vector2 knockback = direction * knockbackForce;
+
+            collision.GetComponent<Enemy>().TakeDamage(damage, knockback);
             Debug.Log("hit");
         }
     }

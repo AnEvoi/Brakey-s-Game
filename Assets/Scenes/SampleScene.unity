@@ -348,6 +348,7 @@ GameObject:
   - component: {fileID: 33140480}
   - component: {fileID: 33140482}
   - component: {fileID: 33140481}
+  - component: {fileID: 33140483}
   m_Layer: 5
   m_Name: Point Counter
   m_TagString: Untagged
@@ -471,6 +472,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 33140479}
   m_CullTransparentMesh: 1
+--- !u!114 &33140483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33140479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a376eddafb4100443af16ad58abafd95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &245869103
 GameObject:
   m_ObjectHideFlags: 0
@@ -1312,11 +1325,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 4
-  dashSpeed: 10
+  dashSpeed: 8
   jumpForce: 6.5
   dashCool: 0.5
   dashCounter: 0
+  damage: 1
+  knockbackForce: 2
   meeleAnim: {fileID: 1058716282}
+  sword: {fileID: 1163065360}
 --- !u!212 &1058716280
 SpriteRenderer:
   m_ObjectHideFlags: 0

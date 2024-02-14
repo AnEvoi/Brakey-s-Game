@@ -28,11 +28,20 @@ public class PlayerController : MonoBehaviour
     public Animator meeleAnim;
     bool isAttacked = false;
 
+    [Header("--Health--")]
+    [SerializeField] private Healthbar healthbar;
+    [SerializeField] private float _currentHealth;
+    private float _maxHealth = 3f;
+
+    [Header("--Others--")]
     Rigidbody2D rb;
     public Collider2D sword;
 
-    private void Start() 
+    void Start() 
     {
+        _currentHealth = _maxHealth;
+        healthbar.UpdateHealthBar(_maxHealth,_currentHealth);
+
         sword.enabled = false;
         sword = GameObject.FindGameObjectWithTag("Sword").GetComponent<Collider2D>();
         meeleAnim = GetComponent<Animator>();
@@ -147,6 +156,20 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
+        }
+        if(collision.gameObject.CompareTag("Enemy"))
+        {
+            _currentHealth -= Random.Range(0.5f,1f);
+
+            if (_currentHealth <= 0)
+            {
+                GetComponent<PlayerController>().enabled = false;
+                healthbar.UpdateHealthBar(_maxHealth, _currentHealth);
+            }
+            else
+            {
+                healthbar.UpdateHealthBar(_maxHealth, _currentHealth);
+            }
         }
     }
 
